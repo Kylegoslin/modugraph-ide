@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ModGraph</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="operator.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+  
+  <style>
+  #op_csv_reader { width: 150px; height: 20px}
+  #op_txt_reader { width: 150px; height: 20px}
+  #op_html_reader { width: 150px; height: 20px}
+  #op_sink { width: 150px; height: 20px}  
+  </style>
+  <style>
+.vl {
+    border-left: 1px solid grey;
+    height: 500px;
+    left:180px;
+    position: fixed;
+    top:0px
+}
+.out {
+    
+    float:right;
+   
+}
+.floatTL{
+ position:absolute;
+    top:0px;
+    left:0px;
+}
+</style>
+
+    
+  <script>
+  var nextID = 1;
+  // place holder for the current selected link
+  var currentSelectedLink = '';
+  
+  var activeOperators = [];
+  
+  // add a new operator to the list
+  // of objects that are currently on display.
+  function addActiveOperator(obj){
+     
+      var newDiv = makeCSVop(nextID);
+      nextID++;
+      $('#'+id)
+      activeOperators.push(newDiv);
+  }
+  
+  function checkIfRegistered(op){
+  
+     var reg = false;
+        for(var i=0; i<activeOperators.length; i++) {
+            var status = activeOperators[i].getAttribute('reg');
+            
+                if(status == true){            
+                reg = true;
+           }
+        }
+        
+        // if the operator has not been registered, then do so.
+        if(reg == false){
+            addActiveOperator(op)
+        }
+
+        return reg;
+  
+  }
+  
+  
+  var links = [];
+  // add a new link between two different operators
+  
+  function addLink(x1, y1, x2, y2){
+      // link 
+      //links.push()
+  }
+  
+  
+  
+  
+  
+  // Add a CSV operator onto the workspace
+  function addCsv(){
+  
+    makeCSVop(nextID);
+    nextID++;
+  }
+  
+  // Add a Text operator onto the workspace
+  function addTxt(){
+  
+    makeTXTop(nextID);
+    nextID++;
+  }
+  // Add a HTML operator onto the workspace
+  function addHTML(){
+  
+    makeHTMLop(nextID);
+    nextID++;
+  }
+
+  // Add sink
+  function addSink(){
+  
+    makeSink(nextID);
+    nextID++;
+  }    
+  </script>
+</head>
+<body>
+<span id="optitle">Operators</span>
+<div id="op_csv_reader" class="ui-widget-content">
+ CSV Reader   <button id="add_csv" onclick="addCsv()">Add</button>
+
+</div>
+ 
+<div id="op_txt_reader" class="ui-widget-content">
+ TXT Reader   <button id="add_txt" onclick="addTxt()">Add</button>
+</div> 
+
+<div id="op_html_reader" class="ui-widget-content">
+ HTML Reader  <button id="add_html" onclick="addHTML()">Add</button>
+
+</div>
+
+<div id="op_sink" class="ui-widget-content">
+  Sink  <button id="add_html" onclick="addSink()">Add</button>
+
+</div>
+<p></p>
+<button onclick="run()"> Run</button>
+Start Op:<br>
+<input type="text" id="startOp"></input>
+
+<div class="vl"></div>
+ 
+ 
+
+<body>
+
+
+<div id="workspace" style="background-color:grey; position:fixed; top:0; left:200px; height:500px; width:500px">
+
+<div class="floatTL">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+       width="500px" height="500px">
+   
+  </svg>  
+</div>
+Workspace
+</div>
+
+<div id="grey" style="background-color:grey; float:right; position:fixed; top:100; right:0px; height:500px; width:200px">
+<span>Properties</span>
+<p></p>
+<br>
+Type:<br> <input type="text" id="op_type"></input><br>
+ID:<br> <input type="text" id="op_id"></input><br>
+Left Link:<br> <input type="text" id="op_left"></input><br>
+Right Link:<br> <input type="text" id="op_right"></input><br>
+
+<div id="op_specific">
+Operator Settings
+</div>
+</div>
+</body>
+
+
+
+
+
+</div>
+
+
+</html>
+
+
+<script>
+function validateChain(firstOp){
+    console.log(firstOp.text());
+    // list of acceptable source operators
+    
+    var isSource = false;
+    var opType = '';
+    if(firstOp.text().indexOf("TXT") >= 0){
+      isSource = true;
+      opType = 'TXT';
+    }
+    if(firstOp.text().indexOf("CSV") >= 0){
+      isSource = true;
+      opType = 'CSV';
+    }
+    if(firstOp.text().indexOf("HTML") >= 0){
+      isSource = true;
+      opType = 'HTML';
+    }
+    
+    console.log("source found: " + isSource);
+    
+    if(opType == 'TXT'){
+       console.log("Getting txt file..");
+       
+       // Get selected file name
+       var fileName = $('input[name=selectedFile]:checked').val();
+       console.log(fileName);
+       
+       
+       $.get( "/readFileContents", { file: fileName } )
+  .done(function( data ) {
+    alert( "Data Loaded: " + data );
+  });
+     
+    }
+    
+    
+}
+// test javascript functions here
+function run(){
+    console.log("Running process..");
+    
+    var startNode = $('#startOp').val();
+    console.log("staring on node ..." + startNode);
+    
+    console.log("First operator.."); 
+    var firstOp = $('#'+startNode);
+    
+    validateChain(firstOp);
+   
+   
+}
+</script>
+
+<div id="dialog" title="Basic dialog">
+<div id="contentholder">content here</div>
+</div>
+
+<script>
+$( function() {
+    
+ $( "#dialog" ).dialog({
+        closeOnEscape: true,
+        modal: true,
+        //position: 'top',
+        width: 400,
+        height: 400,
+        autoOpen: false  ///added this line
+    });
+
+  } );
+  
+  
+  </script>

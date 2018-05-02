@@ -1,0 +1,31 @@
+$( "#op_csv_reader" ).draggable({
+      start: function() {
+       
+      },
+      drag: function() {
+          //#if( > 100){
+          
+          var p = $( "#op_csv_reader" );
+          var position = p.position();
+                // if the div passes the left line onto the canvas
+                // then change the colour and register it with the list.
+               if(position.left > 180){
+                    p.css('background-color', 'grey');
+                    //p.setAttribute('op_id','555');
+                    
+                   checkIfRegistered(p);                    
+               }
+             
+          //}
+      },
+      stop: function() {
+        
+        console.log("stopped");
+        
+        // check if needs to be registed on list
+        //checkIfRegistered();
+        }
+      });
+      
+    $( "#op_txt_reader" ).draggable();
+    $( "#op_html_reader" ).draggable();
