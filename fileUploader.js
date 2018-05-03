@@ -28,23 +28,18 @@ exports.uploaderWindow = function () {
 
 exports.readFileContents = function(request, result){ 
 
-console.log("url is" + request.url);
 
-//var url_parts = url.parse(request.url, true);
-var filename = request.param('file');
-fs.readFile('C:\\Users\\Kyle\\Desktop\\modgraph\\user\\'+filename, 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log(data);
-});
+   var filename = request.param('file');
 
+
+   var contents = fs.readFileSync('C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\'+filename).toString();
+   return contents;
 };
 
 exports.getFiles = function(){ 
 
    console.log("listing files..");
-   var path = 'C:\\Users\\Kyle\\Desktop\\modgraph\\user\\';
+   var path = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\';
    var ff = 'Files<br>'
    var fs = require('fs'),
    files = fs.readdirSync(path);

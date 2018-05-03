@@ -214,15 +214,53 @@ function validateChain(firstOp){
        console.log(fileName);
        
        
-       $.get( "/readFileContents", { file: fileName } )
-  .done(function( data ) {
-    alert( "Data Loaded: " + data );
-  });
+//       $.get( "/readFileContents", { file: fileName } )
+//  .done(function( data ) {
+//    alert( "Data Loaded: " + data );
+//  });
+     
+      
+   // Calling the file reader by passing in
+   // the name of the file we want to open   
+     $.ajax({
+   type: 'GET',
+   url: '/readFileContents?file='+fileName, //Returns ID in body
+   async: false, // <<== THAT makes us wait until the server is done.
+   success: function(data){
+      //alert(data); // So we can use it
+      makeResultswindow(data);
+   },
+   error: function() {
+      alert("Your error message goes here");
+   }
+});
+     
+     
+     
+     
+     
+     
+     
+     
      
     }
     
     
 }
+
+//
+// Open a dialog based upon the content provided
+// in the data variable
+//
+function makeResultswindow(data){
+
+
+$( "#resultsholder" ).html(data);
+$( "#resultswindow" ).dialog( "open" );
+
+}
+
+
 // test javascript functions here
 function run(){
     console.log("Running process..");
@@ -243,9 +281,14 @@ function run(){
 <div id="contentholder">content here</div>
 </div>
 
+<div id="resultswindow" title="Results">
+<div id="resultsholder">Results</div>
+</div>
+
 <script>
 $( function() {
     
+ //Generic dialog
  $( "#dialog" ).dialog({
         closeOnEscape: true,
         modal: true,
@@ -255,7 +298,18 @@ $( function() {
         autoOpen: false  ///added this line
     });
 
-  } );
+// Results viewer window
+ $( "#resultswindow" ).dialog({
+        closeOnEscape: true,
+        modal: true,
+        //position: 'top',
+        width: 500,
+        height: 500,
+        autoOpen: false  ///added this line
+    });
+    
+    
+} );
   
   
-  </script>
+</script>
