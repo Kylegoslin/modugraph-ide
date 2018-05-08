@@ -33,7 +33,7 @@ app.post('/upload', function(req, res) {
   let sampleFile = req.files.sampleFile;
  
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('C:\\Users\\Kyle\\Desktop\\modgraph\\user\\'+sampleFile.name, function(err) {
+  sampleFile.mv('C:\\Users\\Kyle\\Desktop\\modgraph-ide\\user\\'+sampleFile.name, function(err) {
     if (err)
       return res.status(500).send(err);
      
