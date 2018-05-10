@@ -1,6 +1,6 @@
-#  ModuGraph IDE 
-# Version: 0.0.1
-# Status: alpha
+##  ModuGraph IDE 
+## Version: 0.0.1
+## Status: alpha
 --------------------------------------------
 
 Created by: Dr. Kyle Goslin, Dr. Markus Hofmann
@@ -8,7 +8,7 @@ Created by: Dr. Kyle Goslin, Dr. Markus Hofmann
 Institute of Technology Blanchardstown
 
 ---------------------------------------------
-##What is ModuGraph IDE?
+## What is ModuGraph IDE?
 
 ModuGraph IDE is a browser based visual editor for creating D3.js graphs.
 The concept behind this project is to remove the need for programming knowledge
@@ -36,7 +36,7 @@ graph generation process. ModuGraph allows you to create a chain of operators th
 modified to change what data is kept or removed and how the final graph is created.
 
 ---------------------------------------------
-##Under the Hood
+## Under the Hood
 
 After a chain of operators have been completed, ModuGraph then validate the chain in the web browser
 to ensure all of the operators are in the correct order and linking together. After this has been completed,
