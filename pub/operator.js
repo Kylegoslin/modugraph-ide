@@ -316,6 +316,37 @@ function makeHTMLop(id){
 }
 
 
+//
+// Make Gram Operator
+//
+function makeGram(id){
+    
+    var div = document.createElement("div");
+    var title="N Gram";
+    div.innerHTML = title+"<br> ID:"+id;
+    div.id = id;
+   
+    div = operatorMakeCommon(div, id, title);
+    
+
+    return div;
+}
+
+//
+// Make strip
+//
+function makeStrip(id){
+    
+    var div = document.createElement("div");
+    var title="Strip";
+    div.innerHTML = title+"<br> ID:"+id;
+    div.id = id;
+   
+    div = operatorMakeCommon(div, id, title);
+    
+
+    return div;
+}
 
 
 

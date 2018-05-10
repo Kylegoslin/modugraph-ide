@@ -20,6 +20,10 @@ app.get('/file', (req, res) => res.send(up.uploaderWindow()))
 
 app.get('/getfiles', (req, res) => res.send(up.getFiles()))
 app.get('/readFileContents', (req, res) => res.send(up.readFileContents(req, res)))
+
+
+app.get('/stripFileContents', (req, res) => res.send(up.pyStripper(req, res)))
+
 app.get('/login', (req, res) => res.send('login...'))
 
 
@@ -33,7 +37,7 @@ app.post('/upload', function(req, res) {
   let sampleFile = req.files.sampleFile;
  
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('C:\\Users\\Kyle\\Desktop\\modgraph-ide\\user\\'+sampleFile.name, function(err) {
+  sampleFile.mv('C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\'+sampleFile.name, function(err) {
     if (err)
       return res.status(500).send(err);
      

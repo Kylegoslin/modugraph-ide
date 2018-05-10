@@ -16,6 +16,9 @@
   #op_txt_reader { width: 150px; height: 20px}
   #op_html_reader { width: 150px; height: 20px}
   #op_sink { width: 150px; height: 20px}  
+  #op_strip { width: 150px; height: 20px}  
+  #op_gram { width: 150px; height: 20px}  
+  
   </style>
   <style>
 .vl {
@@ -43,37 +46,8 @@
   // place holder for the current selected link
   var currentSelectedLink = '';
   
-  var activeOperators = [];
-  
-  // add a new operator to the list
-  // of objects that are currently on display.
-  function addActiveOperator(obj){
-     
-      var newDiv = makeCSVop(nextID);
-      nextID++;
-      $('#'+id)
-      activeOperators.push(newDiv);
-  }
-  
-  function checkIfRegistered(op){
-  
-     var reg = false;
-        for(var i=0; i<activeOperators.length; i++) {
-            var status = activeOperators[i].getAttribute('reg');
-            
-                if(status == true){            
-                reg = true;
-           }
-        }
-        
-        // if the operator has not been registered, then do so.
-        if(reg == false){
-            addActiveOperator(op)
-        }
 
-        return reg;
   
-  }
   
   
   var links = [];
@@ -84,7 +58,7 @@
       //links.push()
   }
   
-  
+
   
   
   
@@ -114,6 +88,19 @@
     makeSink(nextID);
     nextID++;
   }    
+  
+  function addStrip(){
+  
+    makeStrip(nextID);
+    nextID++;
+  }    
+  function addGram(){
+  
+    makeGram(nextID);
+    nextID++;
+  }    
+  
+  
   </script>
 </head>
 <body>
@@ -136,6 +123,18 @@
   Sink  <button id="add_html" onclick="addSink()">Add</button>
 
 </div>
+
+<div id="op_strip" class="ui-widget-content">
+  Strip NonAlpha  <button id="add_strip" onclick="addStrip()">Add</button>
+
+</div>
+
+<div id="op_gram" class="ui-widget-content">
+  N Gram  <button id="add_gram" onclick="addGram()">Add</button>
+
+</div>
+
+
 <p></p>
 <button onclick="run()"> Run</button>
 Start Op:<br>
@@ -185,8 +184,17 @@ Operator Settings
 
 
 <script>
+//
+// Before the process is run, the entire chain must be validated
+// to ensure that logical links are made between each of the operators
+// and also that the ordering is correct.
+
 function validateChain(firstOp){
     console.log(firstOp.text());
+    console.log("link: " + firstOp.attr('right_link'));
+    
+
+     /*
     // list of acceptable source operators
     
     var isSource = false;
@@ -214,18 +222,18 @@ function validateChain(firstOp){
        console.log(fileName);
        
        
-//       $.get( "/readFileContents", { file: fileName } )
-//  .done(function( data ) {
-//    alert( "Data Loaded: " + data );
-//  });
-     
+    //       $.get( "/readFileContents", { file: fileName } )
+    //  .done(function( data ) {
+    //    alert( "Data Loaded: " + data );
+    //  });
+         
       
    // Calling the file reader by passing in
    // the name of the file we want to open   
      $.ajax({
    type: 'GET',
-   url: '/readFileContents?file='+fileName, //Returns ID in body
-   async: false, // <<== THAT makes us wait until the server is done.
+   url: '/stripFileContents?file='+fileName, //Returns ID in body
+   async: true, 
    success: function(data){
       //alert(data); // So we can use it
       makeResultswindow(data);
@@ -234,16 +242,11 @@ function validateChain(firstOp){
       alert("Your error message goes here");
    }
 });
+     */
      
      
      
-     
-     
-     
-     
-     
-     
-    }
+    
     
     
 }
