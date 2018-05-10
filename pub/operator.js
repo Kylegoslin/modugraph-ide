@@ -200,8 +200,6 @@ function makeSink(id){
 //
 function operatorMakeCommon(div, id, title){
     
-    
-    
     div.style.width = "130px";
     div.style.height = "50px";
     div.style.background = "red";
@@ -213,7 +211,6 @@ function operatorMakeCommon(div, id, title){
     div.setAttribute('left_link', 'none');
     div.setAttribute('right_link', 'none');
 
-
     // Add the the link button
     var leftLink = document.createElement("div");
     leftLink.innerHTML = "Left";
@@ -222,7 +219,6 @@ function operatorMakeCommon(div, id, title){
     leftLink.id = ''+id+'l';
     leftLink.setAttribute('id', ''+id+'l');
     div.appendChild(leftLink);
-
 
    
     // Add right link button
@@ -235,15 +231,11 @@ function operatorMakeCommon(div, id, title){
     linkRight.style.cssFloat = "right";
    
    
-   
-   
     div.appendChild(linkRight);
    
     // add the new div onto the workspace
     document.getElementById("workspace").appendChild(div);
     $( "#"+id ).draggable();
-
-    
 
     
     $( "#"+id+'l').on( "click", function() {
@@ -354,6 +346,7 @@ function makeStrip(id){
 //
 // Get settings for a specific operator
 //
+// at the minute this is just generic for a text file.
 function getOperatorProperties(){
     
     console.log("Getting operator properties");

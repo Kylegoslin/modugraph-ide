@@ -2,10 +2,18 @@
 
 const express = require('express')
 const fileUpload = require('express-fileupload');
-
 const app = express()
+var fs = require('fs');
 
-
+// If the tmp folder doesn't exist then
+// make it. It will be ignored during the
+// commit to git.
+var dir = './tmp';
+console.log("Checking if tmp folder exists..")
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+    console.log("no tmp folder... creating..");
+}
 
 // Generic file uploader window (used for all files)
 var up = require('./fileUploader');
