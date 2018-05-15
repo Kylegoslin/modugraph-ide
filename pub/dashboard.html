@@ -138,7 +138,7 @@
 <p></p>
 <button onclick="run()"> Run</button>
 Start Op:<br>
-<input type="text" id="startOp">1</input>
+<input type="text" id="startOp" value="1"></input>
 
 <div class="vl"></div>
  
@@ -147,7 +147,7 @@ Start Op:<br>
 <body>
 
 
-<div id="workspace" style="background-color:grey; position:fixed; top:0; left:200px; height:500px; width:500px">
+<div id="workspace" style="background-color:grey; position:fixed; top:0; left:200px; height:500px; width:60%">
 
 <div class="floatTL">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
@@ -158,7 +158,7 @@ Start Op:<br>
 Workspace
 </div>
 
-<div id="grey" style="background-color:grey; float:right; position:fixed; top:100; right:0px; height:500px; width:200px">
+<div id="grey" style="background-color:grey; float:right; position:fixed; top:0px; right:0px; height:500px; width:200px">
 <span>Properties</span>
 <p></p>
 <br>
@@ -184,35 +184,98 @@ Operator Settings
 
 
 <script>
+
+//
+// For a given operator instance this function
+// will check the text on it and return the code
+// for that operator used by the python engine.
+function identifyOperator(op){
+    
+    var opType = '';
+    
+    if(op.text().indexOf("TXT") >= 0){
+     
+      opType = 'txtr';
+    }
+    else if(op.text().indexOf("CSV") >= 0){
+     
+      opType = 'csvr';
+    }
+    else if(op.text().indexOf("HTML") >= 0){
+   
+      opType = 'htmlr';
+    }
+    else if(op.text().indexOf("Strip") >= 0){
+   
+      opType = 'sna';
+    }
+    else if(op.text().indexOf("Sink") >= 0){
+   
+      opType = 'sc';
+    }
+    else if(op.text().indexOf("Gram") >= 0){
+   
+      opType = 'gr';
+    }
+    
+    return opType;
+}
+
+
+// This function takes in an operator and then
+// looks for the right link.
+// after it has found a right link, it will take the ID
+// of the operator and return that div
+// if no link exists at the end of the chain, none is returned.
+function getNextLink(op){
+
+  var nextID = op.attr('right_link');
+
+  console.log('Next' + nextID);
+  
+  var next = nextID.replace("r", "").replace("l", "");
+  console.log("next op id" + next);
+  
+  if(nextID == "none"){
+   return "none";
+  } else {
+    return $( "#"+next );
+  }
+}
 //
 // Before the process is run, the entire chain must be validated
 // to ensure that logical links are made between each of the operators
 // and also that the ordering is correct.
 
 function validateChain(firstOp){
-    console.log(firstOp.text());
-    console.log("link: " + firstOp.attr('right_link'));
-    
 
+
+    // Hold a list of flags to run
+    var flags = '';
+    
+    console.log("first op is: "+firstOp.text());
+   
+
+    var chainGoing = true;
+    var nextLink = firstOp;
+    do {
+    
+        flags += ':'+ identifyOperator(nextLink);
+        nextLink = getNextLink(nextLink);
+        
+        // If there is no more links, then break
+        if (nextLink == "none"){
+            chainGoing = false;
+        } 
+    }while (chainGoing == true);
+    
+    
+    
+    console.log("List of Flags--"+flags);
+
+    return flags.substring(1); // strip off the first colon :
      /*
-    // list of acceptable source operators
-    
-    var isSource = false;
-    var opType = '';
-    if(firstOp.text().indexOf("TXT") >= 0){
-      isSource = true;
-      opType = 'TXT';
-    }
-    if(firstOp.text().indexOf("CSV") >= 0){
-      isSource = true;
-      opType = 'CSV';
-    }
-    if(firstOp.text().indexOf("HTML") >= 0){
-      isSource = true;
-      opType = 'HTML';
-    }
-    
-    console.log("source found: " + isSource);
+ 
     
     if(opType == 'TXT'){
        console.log("Getting txt file..");
@@ -227,22 +290,9 @@ function validateChain(firstOp){
     //    alert( "Data Loaded: " + data );
     //  });
          
-      
-   // Calling the file reader by passing in
-   // the name of the file we want to open   
-     $.ajax({
-   type: 'GET',
-   url: '/stripFileContents?file='+fileName, //Returns ID in body
-   async: true, 
-   success: function(data){
-      //alert(data); // So we can use it
-      makeResultswindow(data);
-   },
-   error: function() {
-      alert("Your error message goes here");
-   }
-});
-     */
+     */ 
+  
+
      
      
      
@@ -274,8 +324,30 @@ function run(){
     console.log("First operator.."); 
     var firstOp = $('#'+startNode);
     
-    validateChain(firstOp);
-   
+    var flags = validateChain(firstOp);
+    var configfile = 'user/config.cfg';
+    console.log("clean flags " + flags);
+    
+    
+    
+    
+    // Pass flags to the engine
+    
+         $.ajax({
+   type: 'GET',
+   url: '/runEngine?flags='+encodeURI(flags)+'&configfile='+encodeURI(configfile), //Returns ID in body
+   async: true, 
+   success: function(data){
+      //alert(data); // So we can use it
+      makeResultswindow(data);
+   },
+   error: function() {
+      alert("Your error message goes here");
+   }
+});
+     
+    
+    
    
 }
 </script>
@@ -316,3 +388,7 @@ $( function() {
   
   
 </script>
+
+
+
+

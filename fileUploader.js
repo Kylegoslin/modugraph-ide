@@ -1,4 +1,23 @@
+/*
+----------------------------------------------------------------------
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Copyright 2018 Dr.Kyle Goslin, Dr. Markus Hofmann
+Institute of Technology Blanchardstown
+----------------------------------------------------------------------
+
+*/
 var fs = require('fs');
 var url = require('url');
 
@@ -21,7 +40,7 @@ exports.uploaderWindow = function () {
             </form>     
           </body>
         </html>
-        `+this.getFiles();
+        `;
 
 
 };
@@ -42,14 +61,20 @@ exports.readFileContents = function(request, result){
 
 // --------------------------------------------------------
 //
-// py strip non alpha
+// Run Python engine
 //
 // --------------------------------------------------------
-exports.pyStripper = function(request, result){ 
+exports.runEngine = function(request, result){ 
 
-  var filename = request.param('file');
+  var flags = request.param('flags');
+  var configFile = request.param('configfile');
+  
+  
+  console.log("Flags--"+flags);
+  console.log("Config File--"+configFile);
+  /*
 
-/*
+
 // Run the python script for this module
 const { exec } = require('child_process');
 exec('python.exe pyrunners/stripNonAlpha.py user/'+filename, (err, stdout, stderr) => {
@@ -70,7 +95,7 @@ exec('python.exe pyrunners/stripNonAlpha.py user/'+filename, (err, stdout, stder
 
 
 
-var child = require('child_process').exec('python.exe pyrunners/stripNonAlpha.py user/'+filename)
+var child = require('child_process').exec('python.exe pyrunners/engine.py '+flags+' '+configFile)
 child.stdout.pipe(process.stdout)
 child.on('exit', function() {
   console.log("fin");

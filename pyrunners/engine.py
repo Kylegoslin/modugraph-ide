@@ -1,3 +1,22 @@
+'''
+----------------------------------------------------------------------
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Copyright 2018 Dr.Kyle Goslin, Dr. Markus Hofmann
+Institute of Technology Blanchardstown
+----------------------------------------------------------------------
+'''
 import sys
 import re
 from random import randint
@@ -41,8 +60,10 @@ class Engine:
     # the contents of the buffer
     # to the user    
     def showContents(self):
-        
+        output = open('tmp/output.txt', 'w')
         print(self.contents)
+        output.write(self.contents)
+        output.close()
         
     def loadConfigFile(self, configFilePath):
         print("loading config file")
@@ -72,11 +93,11 @@ e.loadConfigFile(configFile)
 # and run the corrector process for each
 # this assumes the flags are in the correct order.
 for operator in runOrder.split(":"):
-    if "rt" in operator:
+    if "txtr" in operator:
         e.readTXTFile()
     elif "sna" in operator:
         e.stripNonAlpha()
-    elif "ng" in operator:
+    elif "gr" in operator:
         e.makeNGram();
     elif "sc" in operator:
         e.showContents()    

@@ -1,4 +1,22 @@
+/*
+----------------------------------------------------------------------
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Copyright 2018 Dr.Kyle Goslin, Dr. Markus Hofmann
+Institute of Technology Blanchardstown
+----------------------------------------------------------------------
+*/
 
 const express = require('express')
 const fileUpload = require('express-fileupload');
@@ -23,14 +41,14 @@ app.use(fileUpload());
 
 
 
-app.get('/', (req, res) => res.send('Hello World! <a href="pub/dashboard.html">Dashboard</a>'))
+app.get('/', (req, res) => res.send('<a href="pub/dashboard.html">Dashboard</a>'))
 app.get('/file', (req, res) => res.send(up.uploaderWindow()))
 
 app.get('/getfiles', (req, res) => res.send(up.getFiles()))
 app.get('/readFileContents', (req, res) => res.send(up.readFileContents(req, res)))
 
 
-app.get('/stripFileContents', (req, res) => res.send(up.pyStripper(req, res)))
+app.get('/runEngine', (req, res) => res.send(up.runEngine(req, res)))
 
 app.get('/login', (req, res) => res.send('login...'))
 

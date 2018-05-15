@@ -1,4 +1,40 @@
 
+var registeredOps = Array();
+
+
+
+// When a new operator is added onto the workspace
+// the ID must be registered.
+function registerOp(op){
+  
+    console.log("registering: "+op);
+    registeredOps.push(op);
+    
+}
+
+
+// Hide all of the property windows
+// for every other operator apart from the 
+// one the user has just clicked on
+function hideAllProp(id){
+    
+   var i;
+   
+   for (i = 0; i < registeredOps.length; i++) {
+       console.log("checking to hide: " + registeredOps[i]);
+       
+       if(registeredOps[i] != id){
+          
+          $('#'+registeredOps[i]+'set').hide();
+       }
+  
+  }    
+  
+}
+
+
+
+
 //
 // CSV Reader operator
 //
@@ -164,7 +200,7 @@ function makeSink(id){
     $( "#"+id+'l').on( "click", function() {
                console.log(id+"left clicked"); 
                
-               attemptLinkCreation(id+'l');               
+            attemptLinkCreation(id+'l');               
     });
     
     $( "#"+id+'r').on( "click", function() {
@@ -199,6 +235,9 @@ function makeSink(id){
 // Common operator builder.
 //
 function operatorMakeCommon(div, id, title){
+    
+    
+    registerOp(id);
     
     div.style.width = "130px";
     div.style.height = "50px";
@@ -268,7 +307,7 @@ function operatorMakeCommon(div, id, title){
         $( "#op_right").val(div.getAttribute('right_link'));
         
         // Get operator specifc settings
-        getOperatorProperties();
+        getOperatorProperties(id);
         
         
     });
@@ -287,6 +326,31 @@ function makeTXTop(id){
     div.id = id;
     
     div = operatorMakeCommon(div, id,title);
+    
+    
+    
+    // Make operator properties
+    var prop = document.createElement("div");
+    prop.id = id+'set';
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:180px; width:150px;border:1px solid black;\"><button id=\"uploadfile\">Upload File</button><div id=\"fh\"></div></div>";
+    
+    
+   
+    $('#op_specific').append(prop);
+    $('#'+id+'set').hide();
+    
+    // content for uploader dialog
+$("#contentholder").load('/file');
+
+// list files
+$("#fh").append($("<div>").load("/getfiles"));
+$( "#uploadfile" ).click(function() {
+        $( "#dialog" ).dialog( "open" );
+       // return false;
+});
+    
+    
+    
     return div;
 }
 
@@ -336,7 +400,17 @@ function makeStrip(id){
    
     div = operatorMakeCommon(div, id, title);
     
+    // Make operator properties
+    var prop = document.createElement("div");
+    prop.id = id+'set';
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:180px; width:150px;border:1px solid black;\">Strip op</div>";
+    
+    
+   
+    $('#op_specific').append(prop);
+    $('#'+id+'set').hide();
 
+    
     return div;
 }
 
@@ -346,30 +420,15 @@ function makeStrip(id){
 //
 // Get settings for a specific operator
 //
-// at the minute this is just generic for a text file.
-function getOperatorProperties(){
+// The Div with the properties for an operator is just the
+// number of the operator followed by the word "set".
+function getOperatorProperties(id){
     
-    console.log("Getting operator properties");
+    console.log("Getting operator properties: "+ id);
     
-    
+    hideAllProp(id);
     
     var content = "content here";
-    
-    var btn = document.createElement("BUTTON");
-    btn.id = "uploadfile";
-    var t = document.createTextNode("Upload File");
-    btn.appendChild(t);
-    var op_prop = $('#op_specific');
-    
-    op_prop.append(btn);
-    
-     $( "#uploadfile" ).click(function() {
-        $( "#dialog" ).dialog( "open" );
-       // return false;
-    });
-
-    // Generate a list of files to choose from
-    // and have a radio button  to select the file to use.
-    $("#op_specific").append($("<div>").load("/getfiles"));
-   $("#contentholder").load('/file');
+    $('#'+id+'set').show();
+   
 }

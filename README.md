@@ -42,9 +42,7 @@ After a chain of operators have been completed, ModuGraph then validate the chai
 to ensure all of the operators are in the correct order and linking together. After this has been completed,
 a Python based text processing engine is used to generate the desired graph. 
 
-Technologies
-
-ModuGraph is build on:
+Technologies ModuGraph is build on:
 * JavaScript/jQuery/HTML for the user interface
 * NodeJS for server side development with the Express framework
 * Python 3 for low level data manipulation with Python NLTK
