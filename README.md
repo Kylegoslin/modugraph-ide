@@ -46,7 +46,7 @@ Technologies ModuGraph is build on:
 * JavaScript/jQuery/HTML for the user interface
 * NodeJS for server side development with the Express framework
 * Python 3 for low level data manipulation with Python NLTK
-* D3.js for graphig
+* D3.js for graphing
 
 
 
