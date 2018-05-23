@@ -1,0 +1,11 @@
+id,value
+flare,
+flare.analytics,200
+flare.analytics.cluster,500
+flare.analytics.cluster.AgglomerativeCluster,20
+flare.analytics.cluster.CommunityStructure,10
+flare.analytics.cluster.HierarchicalCluster,50
+flare.analytics.cluster.MergeEdge,30
+flare.analytics.graph,100
+flare.analytics.graph.BetweennessCentrality,50
+flare.analytics.graph.LinkDistance,2
