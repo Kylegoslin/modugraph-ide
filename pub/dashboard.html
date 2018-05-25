@@ -18,6 +18,7 @@
   #op_sink { width: 150px; height: 20px}  
   #op_strip { width: 150px; height: 20px}  
   #op_gram { width: 150px; height: 20px}  
+  #op_token { width: 150px; height: 20px}  
   
   </style>
   <style>
@@ -99,8 +100,16 @@
     makeGram(nextID);
     nextID++;
   }    
+  function addToken(){
   
+    makeToken(nextID);
+    nextID++;
+  }      
+    function addTF(){
   
+    makeTF(nextID);
+    nextID++;
+  }  
   </script>
 </head>
 <body>
@@ -133,8 +142,14 @@
   N Gram  <button id="add_gram" onclick="addGram()">Add</button>
 
 </div>
+<div id="op_token" class="ui-widget-content">
+  Tokenize  <button id="add_token" onclick="addToken()">Add</button>
 
+</div>
+<div id="op_termf" class="ui-widget-content">
+  Term Frequency  <button id="add_token" onclick="addTF()">Add</button>
 
+</div>
 <p></p>
 <button onclick="run()"> Run</button>
 Start Op:<br>
@@ -216,6 +231,14 @@ function identifyOperator(op){
     else if(op.text().indexOf("Gram") >= 0){
    
       opType = 'gr';
+    }
+    else if(op.text().indexOf("Token") >= 0){
+   
+      opType = 'tk';
+    }
+    else if(op.text().indexOf("Term Fre") >= 0){
+   
+      opType = 'tf';
     }
     
     return opType;
@@ -322,7 +345,7 @@ function updateWindowRealtime(){
 $.get( "../getlog", function( data ) {
     $( "#resultsholder" ).html(data);
          if(data.includes("Finish")){
-         
+          $('#waiting').hide();
          } else {
          
         setTimeout(function(){updateWindowRealtime(); }, 3000);
@@ -335,7 +358,7 @@ $.get( "../getlog", function( data ) {
 // test javascript functions here
 function run(){
     console.log("Running process..");
-    
+    $('#waiting').show();
     var startNode = $('#startOp').val();
     console.log("staring on node ..." + startNode);
     
@@ -371,10 +394,12 @@ function run(){
 </script>
 
 <div id="dialog" title="Basic dialog">
+
 <div id="contentholder">content here</div>
 </div>
 
 <div id="resultswindow" title="Results">
+<div id="waiting"><img src="img/spinner.gif"/></div>
 <div id="resultsholder">Results</div>
 </div>
 

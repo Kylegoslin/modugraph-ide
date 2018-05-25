@@ -370,7 +370,21 @@ function makeHTMLop(id){
 
     return div;
 }
+//
+// Make Gram Operator
+//
+function makeTF(id){
+    
+    var div = document.createElement("div");
+    var title="Term Frequency";
+    div.innerHTML = title+"<br> ID:"+id;
+    div.id = id;
+   
+    div = operatorMakeCommon(div, id, title);
+    
 
+    return div;
+}
 
 //
 // Make Gram Operator
@@ -387,7 +401,21 @@ function makeGram(id){
 
     return div;
 }
+//
+// Make Gram Operator
+//
+function makeToken(id){
+    
+    var div = document.createElement("div");
+    var title="Tokenize";
+    div.innerHTML = title+"<br> ID:"+id;
+    div.id = id;
+   
+    div = operatorMakeCommon(div, id, title);
+    
 
+    return div;
+}
 //
 // Make strip
 //

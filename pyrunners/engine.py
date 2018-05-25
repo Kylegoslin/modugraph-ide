@@ -21,6 +21,11 @@ import sys
 import re
 from random import randint
 from nltk import ngrams
+from nltk import word_tokenize, tokenize
+from nltk import FreqDist
+
+
+
 
 '''
 
@@ -28,9 +33,26 @@ Main engine class that contains all of the
 different operators that are available.
 '''
 class Engine:
-    contents = 'nan'
+    contents = ''
     workingFile = ''
     
+    def termFreq(self):
+        print("starting new frequency")
+        local = self.contents
+        
+        words = tokenize.word_tokenize(local)
+        f = FreqDist(words)
+        self.contents = str(f.most_common())
+        
+
+    def tokenize(self):
+        print("tokenizng")
+        
+        local = self.contents
+        local = local.replace(" ", ",")
+        print(local) 
+        self.contents = local        
+        
     def readTXTFile(self):
         print ("Read TXT File")
         
@@ -100,5 +122,9 @@ for operator in runOrder.split(":"):
     elif "gr" in operator:
         e.makeNGram();
     elif "sc" in operator:
-        e.showContents()    
+        e.showContents()
+    elif "tk" in operator:
+        e.tokenize()
+    elif "tf" in operator:
+        e.termFreq()          
         
