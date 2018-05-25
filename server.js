@@ -33,8 +33,9 @@ if (!fs.existsSync(dir)){
     console.log("no tmp folder... creating..");
 }
 
-// Generic file uploader window (used for all files)
-var up = require('./fileUploader');
+// this file has a list of different functions
+// that can be used on the server side.
+var up = require('./server_functions');
 
 app.use('/pub', express.static('pub'))
 app.use(fileUpload());
@@ -51,6 +52,10 @@ app.get('/readFileContents', (req, res) => res.send(up.readFileContents(req, res
 app.get('/runEngine', (req, res) => res.send(up.runEngine(req, res)))
 
 app.get('/login', (req, res) => res.send('login...'))
+
+app.get('/getlog', (req, res) => res.send(up.getLog()))
+
+
 
 
 

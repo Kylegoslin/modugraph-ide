@@ -21,6 +21,9 @@ Institute of Technology Blanchardstown
 var fs = require('fs');
 var url = require('url');
 
+var userPath = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\';
+var tempPath = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\tmp\\';
+
 //
 // File uploader window.
 // This is used for all file types
@@ -54,7 +57,7 @@ exports.readFileContents = function(request, result){
 
    var filename = request.param('file');
 
-   var contents = fs.readFileSync('C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\'+filename).toString();
+   var contents = fs.readFileSync(userPath+filename).toString();
    return contents;
 };
 
@@ -69,39 +72,43 @@ exports.runEngine = function(request, result){
   var flags = request.param('flags');
   var configFile = request.param('configfile');
   
-  
-  console.log("Flags--"+flags);
-  console.log("Config File--"+configFile);
-  /*
-
-
-// Run the python script for this module
-const { exec } = require('child_process');
-exec('python.exe pyrunners/stripNonAlpha.py user/'+filename, (err, stdout, stderr) => {
-  if (err) {
-    // node couldn't execute the command
-    console.log('didnt run..');
-    return;
-  }
-
-  // the *entire* stdout and stderr (buffered)
-  console.log(`stdout: ${stdout}`);
-  dump = (`stdout: ${stdout}`);
-
-  console.log(`stderr: ${stderr}`);
-});
-*/
-
-
-
-
-var child = require('child_process').exec('python.exe pyrunners/engine.py '+flags+' '+configFile)
-child.stdout.pipe(process.stdout)
-child.on('exit', function() {
-  console.log("fin");
+   //
+  // delete the proginal process_log file.
+  //
+   var path = tempPath+'process_log.txt';
+  fs.stat(path, function (err, stats) {
   
 
-})
+   if (err) {
+       return console.error(err);
+   }
+
+   fs.unlink(path,function(err){
+        if(err) return console.log(err);
+        console.log('file old log deleted successfully');
+        exports.runEngineGo(request, result);
+   });  
+   });
+ 
+
+
+// Stat the paython engine
+// 
+exports.runEngineGo = function(request, result){   
+  
+  
+    exports.addToLog("Flags--"+flags);
+    exports.addToLog("Config File--"+configFile);
+  
+  
+    var child = require('child_process').exec('python.exe pyrunners/engine.py '+flags+' '+configFile)
+    child.stdout.pipe(process.stdout)
+    child.on('exit', function() {
+      console.log("fin");
+      exports.addToLog("Running Python Engine");
+      exports.addToLog("------ Finished");
+
+    })
 
 
 
@@ -111,15 +118,39 @@ child.on('exit', function() {
    //var contents = fs.readFileSync('C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\'+filename).toString();
    //return contents;
 };
+
+};
+
+//
+// Get the contents of the log
+// and make it web friendly.
+exports.getLog = function(){
+    
+     var contents = fs.readFileSync(tempPath+'\\process_log.txt').toString();
+   return contents;
+};
+
+exports.addToLog = function(tx){
+
+    fs.appendFileSync(tempPath+"process_log.txt", tx+"<br>\r\n", function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    
+}); 
+    
+ };
+
 //Create a list of the files that are 
 //currently available to work with.
 exports.getFiles = function(){ 
 
    console.log("listing files..");
-   var path = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\';
+  
    var ff = 'Files<br>'
    var fs = require('fs'),
-   files = fs.readdirSync(path);
+   files = fs.readdirSync(userPath);
 
    files.forEach(function(file) {
       //var contents = fs.readFileSync(__dirname + '/files/' + file, 'utf8');

@@ -308,12 +308,30 @@ function validateChain(firstOp){
 function makeResultswindow(data){
 
 
-$( "#resultsholder" ).html(data);
+
+
 $( "#resultswindow" ).dialog( "open" );
 
+    
+    updateWindowRealtime();
 }
 
 
+function updateWindowRealtime(){
+
+$.get( "../getlog", function( data ) {
+    $( "#resultsholder" ).html(data);
+         if(data.includes("Finish")){
+         
+         } else {
+         
+        setTimeout(function(){updateWindowRealtime(); }, 3000);
+         
+         } 
+    });
+
+    
+}
 // test javascript functions here
 function run(){
     console.log("Running process..");
@@ -325,7 +343,7 @@ function run(){
     var firstOp = $('#'+startNode);
     
     var flags = validateChain(firstOp);
-    var configfile = 'user/config.cfg';
+    var configfile = 'user/settings/config.cfg';
     console.log("clean flags " + flags);
     
     
@@ -386,6 +404,7 @@ $( function() {
     
 } );
   
+ 
   
 </script>
 
