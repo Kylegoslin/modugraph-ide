@@ -23,6 +23,10 @@ const fileUpload = require('express-fileupload');
 const app = express()
 var fs = require('fs');
 
+
+// Change this to suit the current dirictory
+var mgRoot = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\';
+
 // If the tmp folder doesn't exist then
 // make it. It will be ignored during the
 // commit to git.
@@ -44,20 +48,13 @@ app.use(fileUpload());
 
 app.get('/', (req, res) => res.send('<a href="pub/dashboard.html">Dashboard</a>'))
 app.get('/file', (req, res) => res.send(up.uploaderWindow()))
-
 app.get('/getfiles', (req, res) => res.send(up.getFiles()))
 app.get('/readFileContents', (req, res) => res.send(up.readFileContents(req, res)))
-
-
 app.get('/runEngine', (req, res) => res.send(up.runEngine(req, res)))
-
 app.get('/login', (req, res) => res.send('login...'))
-
 app.get('/getlog', (req, res) => res.send(up.getLog()))
-
-
-
-
+app.get('/output', (req, res) => res.send(up.readOutput()))
+app.get('/saveConfig', (req, res) => res.send(up.saveConfig(req,res)))
 
  
 app.post('/upload', function(req, res) {
@@ -68,7 +65,7 @@ app.post('/upload', function(req, res) {
   let sampleFile = req.files.sampleFile;
  
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\'+sampleFile.name, function(err) {
+  sampleFile.mv(mgRoot+'\\user\\'+sampleFile.name, function(err) {
     if (err)
       return res.status(500).send(err);
      

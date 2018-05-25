@@ -21,8 +21,11 @@ Institute of Technology Blanchardstown
 var fs = require('fs');
 var url = require('url');
 
-var userPath = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\user\\';
-var tempPath = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\tmp\\';
+// These are hard coded for the moment
+// will change in the future.
+var mgRoot = 'C:\\Users\\Kyle\\Desktop\\modugraph-ide\\';
+var userPath = mgRoot + 'user\\';
+var tempPath = mgRoot+ 'tmp\\';
 
 //
 // File uploader window.
@@ -48,6 +51,26 @@ exports.uploaderWindow = function () {
 
 };
 
+//
+// Function used for saving specific configuration
+// variables to the user's config file in the
+// /user folder
+exports.saveConfig = function(request, result){ 
+
+
+   var varname_val = request.param('varname');
+   var option_val = request.param('option');
+   
+   // This currently just writes the first line, which is the file to load from the operator
+   // this has to be improved to include other variables on other lines in the future.
+   fs.writeFile(userPath+'\\settings\\config.cfg', 'user/'+option_val, function (err) {
+  if (err) throw err;
+  console.log('Saved!');
+});
+
+   
+   
+};
 // -------------------------------------------------------
 //
 // Read the contents of a file
@@ -61,6 +84,16 @@ exports.readFileContents = function(request, result){
    return contents;
 };
 
+
+
+exports.readOutput = function(request, result){ 
+
+
+  
+
+   var contents = fs.readFileSync(mgRoot+'\\tmp\\output.txt').toString();
+   return contents;
+};
 
 // --------------------------------------------------------
 //
@@ -148,15 +181,15 @@ exports.getFiles = function(){
 
    console.log("listing files..");
   
-   var ff = 'Files<br>'
+   var ff = 'Files<br>';
    var fs = require('fs'),
    files = fs.readdirSync(userPath);
 
    files.forEach(function(file) {
       //var contents = fs.readFileSync(__dirname + '/files/' + file, 'utf8');
-      console.log(file);
-      ff = ff + file + '<input type="radio" name="selectedFile" value="'+file+'"><br>';
+      //console.log(file);
+      ff = ff + file + '<input type="radio" name="selectedFile" onclick="saveFileSelected()" id="selectedFile" value="'+file+'"><br>';
 }) 
-    
+   ff = ff + '';
     return (ff) ;
  };

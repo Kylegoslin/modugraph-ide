@@ -12,13 +12,8 @@
   
   
   <style>
-  #op_csv_reader { width: 150px; height: 20px}
-  #op_txt_reader { width: 150px; height: 20px}
-  #op_html_reader { width: 150px; height: 20px}
-  #op_sink { width: 150px; height: 20px}  
-  #op_strip { width: 150px; height: 20px}  
-  #op_gram { width: 150px; height: 20px}  
-  #op_token { width: 150px; height: 20px}  
+  .op{ width: 150px; height: 30px}
+  
   
   </style>
   <style>
@@ -114,39 +109,39 @@
 </head>
 <body>
 <span id="optitle">Operators</span>
-<div id="op_csv_reader" class="ui-widget-content">
+<div id="op_csv_reader" class="op">
  CSV Reader   <button id="add_csv" onclick="addCsv()">Add</button>
 
 </div>
  
-<div id="op_txt_reader" class="ui-widget-content">
+<div id="op_txt_reader" class="op">
  TXT Reader   <button id="add_txt" onclick="addTxt()">Add</button>
 </div> 
 
-<div id="op_html_reader" class="ui-widget-content">
+<div id="op_html_reader" class="op">
  HTML Reader  <button id="add_html" onclick="addHTML()">Add</button>
 
 </div>
 
-<div id="op_sink" class="ui-widget-content">
+<div id="op_sink" class="op">
   Sink  <button id="add_html" onclick="addSink()">Add</button>
 
 </div>
 
-<div id="op_strip" class="ui-widget-content">
+<div id="op_strip" class="op">
   Strip NonAlpha  <button id="add_strip" onclick="addStrip()">Add</button>
 
 </div>
 
-<div id="op_gram" class="ui-widget-content">
+<div id="op_gram" class="op">
   N Gram  <button id="add_gram" onclick="addGram()">Add</button>
 
 </div>
-<div id="op_token" class="ui-widget-content">
+<div id="op_token" class="op">
   Tokenize  <button id="add_token" onclick="addToken()">Add</button>
 
 </div>
-<div id="op_termf" class="ui-widget-content">
+<div id="op_termf" class="op">
   Term Frequency  <button id="add_token" onclick="addTF()">Add</button>
 
 </div>
@@ -333,9 +328,7 @@ function makeResultswindow(data){
 
 
 
-$( "#resultswindow" ).dialog( "open" );
-
-    
+    $( "#resultswindow" ).dialog( "open" );
     updateWindowRealtime();
 }
 
@@ -345,7 +338,15 @@ function updateWindowRealtime(){
 $.get( "../getlog", function( data ) {
     $( "#resultsholder" ).html(data);
          if(data.includes("Finish")){
-          $('#waiting').hide();
+              $('#waiting').hide();
+              $('#rawresult').show();
+           
+                $.get( "/output", {} )
+                  .done(function( data ) {
+                     $("textarea#raw").val(data);
+                  });
+    
+             
          } else {
          
         setTimeout(function(){updateWindowRealtime(); }, 3000);
@@ -357,6 +358,8 @@ $.get( "../getlog", function( data ) {
 }
 // test javascript functions here
 function run(){
+
+
     console.log("Running process..");
     $('#waiting').show();
     var startNode = $('#startOp').val();
@@ -371,10 +374,10 @@ function run(){
     
     
     
-    
-    // Pass flags to the engine
-    
-         $.ajax({
+   // ---------------------------------------
+   // Pass flags to the engine
+   // --------------------------------------
+   $.ajax({
    type: 'GET',
    url: '/runEngine?flags='+encodeURI(flags)+'&configfile='+encodeURI(configfile), //Returns ID in body
    async: true, 
@@ -401,9 +404,20 @@ function run(){
 <div id="resultswindow" title="Results">
 <div id="waiting"><img src="img/spinner.gif"/></div>
 <div id="resultsholder">Results</div>
+
+
+<div id="rawresult">
+<p></p>
+Raw output<br>
+<textarea id="raw" name="raw" rows=20 cols=50></textarea>
+</div>
 </div>
 
 <script>
+
+ 
+ 
+ 
 $( function() {
     
  //Generic dialog
@@ -426,10 +440,26 @@ $( function() {
         autoOpen: false  ///added this line
     });
     
+    $('#rawresult').hide();
     
 } );
   
- 
+
+function saveFileSelected(){
+ var selected = $("input[name='selectedFile']:checked").val();
+ saveConfig('selectedFile', selected);
+
+}
+
+// Send a get request to save the a variable to the
+// configuration file
+function saveConfig(varname, option){
+
+        $.get( "/saveConfig", { varname:varname, option:option } )
+      .done(function( data ) {
+        //alert( "Data Loaded: " + data );
+      });
+}
   
 </script>
 
