@@ -48,7 +48,16 @@ app.use(fileUpload());
 
 app.get('/', (req, res) => res.send('<a href="pub/dashboard.html">Dashboard</a>'))
 app.get('/file', (req, res) => res.send(up.uploaderWindow()))
+
+// not being used anymore
 app.get('/getfiles', (req, res) => res.send(up.getFiles()))
+
+
+app.get('/getfilescsv', (req, res) => res.send(up.getFilesCSV()))
+app.get('/getfileshtml', (req, res) => res.send(up.getFilesHTML()))
+app.get('/getfilestxt', (req, res) => res.send(up.getFilesTXT()))
+
+
 app.get('/readFileContents', (req, res) => res.send(up.readFileContents(req, res)))
 app.get('/runEngine', (req, res) => res.send(up.runEngine(req, res)))
 app.get('/login', (req, res) => res.send('login...'))

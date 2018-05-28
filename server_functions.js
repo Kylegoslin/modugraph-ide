@@ -37,7 +37,8 @@ exports.uploaderWindow = function () {
         <html>
           <body>
             <form ref='uploadForm' 
-              id='uploadForm' 
+              id='uploadForm'
+              target="_blank"              
               action='http://localhost:3000/upload' 
               method='post' 
               encType="multipart/form-data">
@@ -46,7 +47,10 @@ exports.uploaderWindow = function () {
             </form>     
           </body>
         </html>
+        
         `;
+        
+      
 
 
 };
@@ -177,21 +181,70 @@ exports.addToLog = function(tx){
     
  };
 
-//Create a list of the files that are 
+// TXT
 //currently available to work with.
-exports.getFiles = function(request, result){ 
+exports.getFilesTXT = function(request, result){ 
 
 
-//   var type = request.param('t');
+
 
    console.log("listing files..type");
   
-   var ff = 'Files<br>';
+   var ff = '<br>';
    var fs = require('fs'),
    files = fs.readdirSync(userPath);
 
    files.forEach(function(file) {
+         if(file.indexOf(".txt")>0) {
       ff = ff + file + '<input type="radio" name="selectedFile" onclick="saveFileSelected()" id="selectedFile" value="'+file+'"><br>';
+         }
+}) 
+   ff = ff + '';
+    return (ff) ;
+ };
+ 
+ 
+ // HTML
+//currently available to work with.
+exports.getFilesHTML = function(request, result){ 
+
+
+
+
+   console.log("listing files..type");
+  
+   var ff = '<br>';
+   var fs = require('fs'),
+   files = fs.readdirSync(userPath);
+
+   files.forEach(function(file) {
+         if(file.indexOf(".html")>0 || file.indexOf(".html") > 0) {
+      ff = ff + file + '<input type="radio" name="selectedFile" onclick="saveFileSelected()" id="selectedFile" value="'+file+'"><br>';
+         }
+}) 
+   ff = ff + '';
+    return (ff) ;
+ };
+ 
+ 
+// CSV
+//currently available to work with.
+exports.getFilesCSV = function(request, result){ 
+
+
+
+
+   console.log("listing files..type");
+  
+   var ff = '<br>';
+   var fs = require('fs'),
+   files = fs.readdirSync(userPath);
+
+   files.forEach(function(file) {
+      
+       if(file.indexOf(".csv")>0) {
+      ff = ff + file + '<input type="radio" name="selectedFile" onclick="saveFileSelected()" id="selectedFile" value="'+file+'"><br>';
+       }
 }) 
    ff = ff + '';
     return (ff) ;

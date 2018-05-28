@@ -46,6 +46,29 @@ function makeCSVop(id){
     div.id = id;
     
     div = operatorMakeCommon(div, id, title);
+    
+    // Make operator properties
+    var prop = document.createElement("div");
+    prop.id = id+'set';
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:100%; width:150px;border:1px solid black;\"><button id=\"uploadfile\">Upload File</button><br>CSV Files<div id=\"fhcsv\"></div></div>";
+    
+    
+   
+    $('#op_specific').append(prop);
+    $('#'+id+'set').hide();
+    
+    // content for uploader dialog
+$("#contentholder").load('/file');
+
+// list files
+$("#fhcsv").append($("<div>").load("/getfilescsv"));
+$( "#uploadfile" ).click(function() {
+        $( "#dialog" ).dialog( "open" );
+       // return false;
+});
+    
+    
+ 
     return div;    
 }
 
@@ -332,7 +355,7 @@ function makeTXTop(id){
     // Make operator properties
     var prop = document.createElement("div");
     prop.id = id+'set';
-    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:180px; width:150px;border:1px solid black;\"><button id=\"uploadfile\">Upload File</button><div id=\"fh\"></div></div>";
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:100%; width:150px;border:1px solid black;\"><button id=\"uploadfile_txt\">Upload File</button><br>TXT Files<div id=\"fhtxt\"></div></div>";
     
     
    
@@ -340,20 +363,25 @@ function makeTXTop(id){
     $('#'+id+'set').hide();
     
     // content for uploader dialog
-$("#contentholder").load('/file');
+    $("#contentholder").load('/file');
 
-// list files
-$("#fh").append($("<div>").load("/getfiles"));
-$( "#uploadfile" ).click(function() {
-        $( "#dialog" ).dialog( "open" );
-       // return false;
-});
+    // list files
+    $("#fhtxt").append($("<div>").load("/getfilestxt"));
+    
+    $( "#uploadfile_txt" ).click(function() {
+            $( "#dialog" ).dialog( "open" );
+           // return false;
+    });
     
     
     
     return div;
 }
 
+
+
+
+  
 
 //
 // HTML Reader Operator
@@ -370,7 +398,7 @@ function makeHTMLop(id){
   // Make operator properties
     var prop = document.createElement("div");
     prop.id = id+'set';
-    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:180px; width:150px;border:1px solid black;\"><button id=\"uploadfile\">Upload File</button><div id=\"fh\"></div></div>";
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:100%; width:150px;border:1px solid black;\"><button id=\"uploadfile_html\">Upload File</button><br>HTML Files<div id=\"fhhtml\"></div></div>";
     
     
    
@@ -381,8 +409,8 @@ function makeHTMLop(id){
 $("#contentholder").load('/file');
 
 // list files
-$("#fh").append($("<div>").load("/getfiles?t=html"));
-$( "#uploadfile" ).click(function() {
+$("#fhhtml").append($("<div>").load("/getfileshtml"));
+$( "#uploadfile_html" ).click(function() {
         $( "#dialog" ).dialog( "open" );
        // return false;
 });
@@ -473,8 +501,16 @@ function makeStrip(id){
 function getOperatorProperties(id){
     
     console.log("Getting operator properties: "+ id);
-    
+      // txt - refresh the file lists
+    $("#fhtxt").empty().append($("<div>").load("/getfilestxt"));
+
+    // html
+    $("#fhhtml").empty().append($("<div>").load("/getfileshtml"));
+    // csv 
+    $("#fhcsv").empty().append($("<div>").load("/getfilescsv"));  
     hideAllProp(id);
+    
+
     
     var content = "content here";
     $('#'+id+'set').show();
