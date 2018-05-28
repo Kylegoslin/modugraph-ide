@@ -367,7 +367,27 @@ function makeHTMLop(id){
    
     div = operatorMakeCommon(div, id, title);
     
+  // Make operator properties
+    var prop = document.createElement("div");
+    prop.id = id+'set';
+    prop.innerHTML = "<br>    <div id=\"prop\" style=\"height:180px; width:150px;border:1px solid black;\"><button id=\"uploadfile\">Upload File</button><div id=\"fh\"></div></div>";
+    
+    
+   
+    $('#op_specific').append(prop);
+    $('#'+id+'set').hide();
+    
+    // content for uploader dialog
+$("#contentholder").load('/file');
 
+// list files
+$("#fh").append($("<div>").load("/getfiles?t=html"));
+$( "#uploadfile" ).click(function() {
+        $( "#dialog" ).dialog( "open" );
+       // return false;
+});
+    
+    
     return div;
 }
 //

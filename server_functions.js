@@ -73,7 +73,7 @@ exports.saveConfig = function(request, result){
 };
 // -------------------------------------------------------
 //
-// Read the contents of a file
+// Read the contents of a file by name.
 // -------------------------------------------------------
 exports.readFileContents = function(request, result){ 
 
@@ -85,7 +85,9 @@ exports.readFileContents = function(request, result){
 };
 
 
-
+//
+// Function for pulling in the contents of the raw output file for viewing.
+//
 exports.readOutput = function(request, result){ 
 
 
@@ -177,17 +179,18 @@ exports.addToLog = function(tx){
 
 //Create a list of the files that are 
 //currently available to work with.
-exports.getFiles = function(){ 
+exports.getFiles = function(request, result){ 
 
-   console.log("listing files..");
+
+//   var type = request.param('t');
+
+   console.log("listing files..type");
   
    var ff = 'Files<br>';
    var fs = require('fs'),
    files = fs.readdirSync(userPath);
 
    files.forEach(function(file) {
-      //var contents = fs.readFileSync(__dirname + '/files/' + file, 'utf8');
-      //console.log(file);
       ff = ff + file + '<input type="radio" name="selectedFile" onclick="saveFileSelected()" id="selectedFile" value="'+file+'"><br>';
 }) 
    ff = ff + '';
